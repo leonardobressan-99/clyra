@@ -326,7 +326,7 @@ function companyDatasets(t) {
 
 function freshState() {
   return {
-    v: 8,
+    v: 9,
     theme: 'light',
     user: { name: 'Hannah Clarke', first: 'Hannah', email: 'hannah.clarke@northvale-screening.example', initials: 'HC', role: 'Head of Screening Analytics' },
     workspace: { name: 'Northvale Screening Partnership', short: 'NS', plan: 'Enterprise', region: 'eu-west-2', regionName: 'London', ukGdpr: true, deployment: 'Dedicated, in customer’s cloud tenancy' },
@@ -548,10 +548,10 @@ function demoState() {
 }
 
 /* ---------- Persistence ---------- */
-const STORE_KEY = 'clyra-proto-v8';
+const STORE_KEY = 'clyra-proto-v9';
 let S;
 function load() {
-  try { const raw = localStorage.getItem(STORE_KEY); if (raw) { const p = JSON.parse(raw); if (p && p.v === 8) return p; } } catch (e) { /* storage unavailable */ }
+  try { const raw = localStorage.getItem(STORE_KEY); if (raw) { const p = JSON.parse(raw); if (p && p.v === 9) return p; } } catch (e) { /* storage unavailable */ }
   return demoState();
 }
 let saveTimer;
@@ -2174,8 +2174,10 @@ function datasetFromUpload(f) {
 /* ---------- Runs ---------- */
 function runCost(run) {
   const rows = run.datasets.reduce((a, id) => a + (dsById(id)?.rows || 0), 0);
-  if (run.mode === 'quick') return 0.4 + rows / 60000;
-  return (2 + rows / 9000) * (run.base === 'clyra-2.1-preview' ? 1.6 : run.base === 'clyra-2-mini' ? .5 : 1);
+  // Cost grows with the order of magnitude of the data, so million-row tables stay within a weekly budget
+  const scale = Math.log10(rows + 10);
+  if (run.mode === 'quick') return 0.2 + scale * 0.35;
+  return (2 + scale * 3.2) * (run.base === 'clyra-2.1-preview' ? 1.6 : run.base === 'clyra-2-mini' ? .5 : 1);
 }
 function startRun(cfg) {
   const run = makeRun(cfg);
