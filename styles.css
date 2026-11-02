@@ -1703,3 +1703,22 @@ h2, h3 { font-weight: 500 !important; letter-spacing: -.02em !important; }
 .sb-privacy { font-size: 10.5px; line-height: 1.45; color: var(--sage); opacity: .75; padding: 2px 10px 6px; }
 .shell.sb-collapsed .sb-privacy { display: none; }
 @media (max-width: 1100px) and (min-width: 761px) { .sb-privacy { display: none; } }
+
+/* Short screens (laptops ~770–860px tall): keep every nav item visible */
+@media (min-width: 761px) and (max-height: 980px) {
+  .sidebar .usage-card { display: none; }
+  .sidebar { padding-top: 14px; }
+  .sb-head { padding-bottom: 10px; }
+  .nav-group { padding-top: 8px; padding-bottom: 2px; }
+  .nav-item { height: 33px; min-height: 33px; }
+  .sidebar .nav-sub button { height: 26px; }
+  .ask-btn { height: 38px; }
+}
+@media (min-width: 761px) and (max-height: 720px) {
+  .sidebar .nav-sub, .sidebar .sb-privacy, .sidebar .sb-row { display: none; }
+}
+@media (min-width: 761px) and (max-height: 800px) {
+  .nav-item { height: 31px; min-height: 31px; }
+  .nav-group { padding-top: 6px; }
+  .sidebar .ws-switch { padding-top: 6px; padding-bottom: 6px; }
+}
